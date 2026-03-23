@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url_for('search') }}"><i class="fas fa-search"></i> Search</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="login-page">
+    <div class="form-card login-card fade-in">
+        <div class="login-icon admin">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <h2>Admin Login</h2>
+        <p class="form-subtitle">Fake News Detection — Admin Panel</p>
+        <form method="POST" action="{{ url_for('admin_login') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="admin-name"><i class="fas fa-user"></i> Username</label>
+                <input type="text" name="name" id="admin-name" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-pass"><i class="fas fa-key"></i> Password</label>
+                <input type="password" name="pass" id="admin-pass" placeholder="Enter password" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="admin-login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

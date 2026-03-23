@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="navbar-links" id="navbar-links">
+            <li><a href="{{ url_for('admin_home') }}" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin_indicators') }}"><i class="fas fa-cogs"></i> Indicators</a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-link"></i> URL <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('admin_add_url') }}"><i class="fas fa-plus-circle"></i> Add News URL</a>
+                    <a href="{{ url_for('admin_view_urls') }}"><i class="fas fa-list"></i> View News URLs</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-bug"></i> Malware <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('admin_view_malware') }}"><i class="fas fa-user-secret"></i> User Search Malware</a>
+                    <a href="{{ url_for('admin_view_all_malware') }}"><i class="fas fa-database"></i> All Malware Sites</a>
+                </div>
+            </li>
+            <li><a href="{{ url_for('admin_search_history') }}"><i class="fas fa-history"></i> History</a></li>
+            <li><a href="{{ url_for('admin_logout') }}" class="btn-nav btn-nav-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-header fade-in">
+        <h1>Admin Dashboard</h1>
+        <p>Monitor system activity and manage fake news detection</p>
+    </div>
+
+    <div class="stats-grid fade-in">
+        <div class="stat-card stat-blue stagger-1">
+            <div class="stat-icon"><i class="fas fa-search"></i></div>
+            <div class="stat-info">
+                <span class="stat-value" data-count="{{ stats.total_searches }}">0</span>
+                <span class="stat-label">Total Searches</span>
+            </div>
+        </div>
+        <div class="stat-card stat-red stagger-2">
+            <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <div class="stat-info">
+                <span class="stat-value" data-count="{{ stats.fake_detections }}">0</span>
+                <span class="stat-label">Fake Detected</span>
+            </div>
+        </div>
+        <div class="stat-card stat-emerald stagger-3">
+            <div class="stat-icon"><i class="fas fa-tags"></i></div>
+            <div class="stat-info">
+                <span class="stat-value" data-count="{{ stats.total_indicators }}">0</span>
+                <span class="stat-label">Indicators</span>
+            </div>
+        </div>
+        <div class="stat-card stat-purple stagger-4">
+            <div class="stat-icon"><i class="fas fa-skull-crossbones"></i></div>
+            <div class="stat-info">
+                <span class="stat-value" data-count="{{ stats.total_attack_urls }}">0</span>
+                <span class="stat-label">Attack URLs</span>
+            </div>
+        </div>
+        <div class="stat-card stat-amber stagger-1">
+            <div class="stat-icon"><i class="fas fa-bug"></i></div>
+            <div class="stat-info">
+                <span class="stat-value" data-count="{{ stats.total_malware_logs }}">0</span>
+                <span class="stat-label">Malware Logs</span>
+            </div>
+        </div>
+        <div class="stat-card stat-cyan stagger-2">
+            <div class="stat-icon"><i class="fas fa-link"></i></div>
+            <div class="stat-info">
+                <span class="stat-value" data-count="{{ stats.total_news_urls }}">0</span>
+                <span class="stat-label">Indexed URLs</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid mt-3">
+        <a href="{{ url_for('admin_indicators') }}" class="card-link">
+            <div class="card fade-in stagger-1">
+                <div class="card-icon blue"><i class="fas fa-cogs"></i></div>
+                <h3>Manage Indicators</h3>
+                <p>Add or remove keywords used for fake news detection</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin_add_url') }}" class="card-link">
+            <div class="card fade-in stagger-2">
+                <div class="card-icon emerald"><i class="fas fa-plus-circle"></i></div>
+                <h3>Add News URL</h3>
+                <p>Add new URLs to the search indexer database</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin_view_urls') }}" class="card-link">
+            <div class="card fade-in stagger-3">
+                <div class="card-icon purple"><i class="fas fa-list"></i></div>
+                <h3>View Indexed URLs</h3>
+                <p>Browse all URLs currently stored in the indexer</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin_view_malware') }}" class="card-link">
+            <div class="card fade-in stagger-4">
+                <div class="card-icon red"><i class="fas fa-user-secret"></i></div>
+                <h3>User Malware Reports</h3>
+                <p>View logs of users hit by malicious URLs</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin_view_all_malware') }}" class="card-link">
+            <div class="card fade-in stagger-1">
+                <div class="card-icon amber"><i class="fas fa-database"></i></div>
+                <h3>All Malware Sites</h3>
+                <p>Complete dataset of known malicious sites</p>
+            </div>
+        </a>
+        <a href="{{ url_for('admin_search_history') }}" class="card-link">
+            <div class="card fade-in stagger-2">
+                <div class="card-icon cyan"><i class="fas fa-history"></i></div>
+                <h3>Search History</h3>
+                <p>View all user search queries and detection results</p>
+            </div>
+        </a>
+    </div>
+
+    {% if stats.recent_searches %}
+    <div class="table-wrapper fade-in mt-3">
+        <div class="results-header" style="padding: 1rem 1.5rem;">
+            <i class="fas fa-clock" style="color: var(--accent-cyan); font-size: 1.2rem;"></i>
+            <h2>Recent Searches</h2>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Query</th>
+                    <th>Result</th>
+                    <th>Confidence</th>
+                    <th>IP</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in stats.recent_searches %}
+                <tr>
+                    <td>{{ s['query'][:60] }}{% if s['query']|length > 60 %}...{% endif %}</td>
+                    <td>
+                        {% if s['result'] == 'Fake News' or s['result'] == 'Malicious URL' %}
+                        <span class="badge badge-danger">{{ s['result'] }}</span>
+                        {% elif s['result'] == 'Suspicious' %}
+                        <span class="badge badge-warning">{{ s['result'] }}</span>
+                        {% else %}
+                        <span class="badge badge-safe">{{ s['result'] }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ s['confidence'] }}%</td>
+                    <td><span class="badge badge-info">{{ s['ip_address'] }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.stat-value[data-count]').forEach(function(el) {
+        const target = parseInt(el.dataset.count);
+        const duration = 1500;
+        const start = performance.now();
+        function animate(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(target * eased);
+            if (progress < 1) requestAnimationFrame(animate);
+            else el.textContent = target;
+        }
+        setTimeout(function() { requestAnimationFrame(animate); }, 400);
+    });
+});
+</script>
+{% endblock %}

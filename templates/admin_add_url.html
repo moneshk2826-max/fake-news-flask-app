@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Add URL{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="{{ url_for('admin_home') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li class="dropdown">
+                <a href="#" class="active"><i class="fas fa-link"></i> URL <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('admin_add_url') }}"><i class="fas fa-plus-circle"></i> Add News URL</a>
+                    <a href="{{ url_for('admin_view_urls') }}"><i class="fas fa-list"></i> View News URLs</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-bug"></i> Malware <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('admin_view_malware') }}"><i class="fas fa-user-secret"></i> User Search Malware</a>
+                    <a href="{{ url_for('admin_view_all_malware') }}"><i class="fas fa-database"></i> All Malware Sites</a>
+                </div>
+            </li>
+            <li><a href="{{ url_for('admin_logout') }}" class="btn-nav btn-nav-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="form-card fade-in">
+        <h2><i class="fas fa-plus-circle" style="color: var(--accent-blue);"></i> Add News URL</h2>
+        <p class="form-subtitle">Add a new URL to the search indexer</p>
+        <form method="POST" action="{{ url_for('admin_add_url') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="add-url"><i class="fas fa-link"></i> URL</label>
+                <input type="url" name="urls" id="add-url" placeholder="https://example.com/news-article" required>
+            </div>
+            <div class="form-group">
+                <label for="add-keyword"><i class="fas fa-tags"></i> Keywords</label>
+                <textarea name="message" id="add-keyword" placeholder="Enter comma-separated keywords" required></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="add-url-btn">
+                    <i class="fas fa-plus"></i> Add to Indexer
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

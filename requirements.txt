@@ -1,0 +1,8 @@
+Flask==3.1.*
+Flask-Limiter==3.8.*
+Flask-WTF==1.2.*
+gunicorn==23.0.*
+joblib==1.4.*
+pandas==2.2.*
+scikit-learn==1.6.*
+Werkzeug==3.1.*

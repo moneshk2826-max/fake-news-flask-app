@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="navbar-links" id="navbar-links">
+            <li><a href="{{ url_for('search') }}"><i class="fas fa-search"></i> Search</a></li>
+            <li><a href="{{ url_for('admin_login') }}"><i class="fas fa-user-shield"></i> Admin</a></li>
+            <li><a href="{{ url_for('attacker_login') }}"><i class="fas fa-skull-crossbones"></i> Blocker</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="hero fade-in">
+    <div class="hero-badge">
+        <i class="fas fa-bolt"></i>
+        Machine Learning Powered
+    </div>
+    <h1>
+        <span class="gradient-text">Fake News Detection</span><br>
+        Using Machine Learning
+    </h1>
+    <p>Detect fake news headlines and malicious URLs in real-time using advanced analysis and machine learning techniques.</p>
+    <div class="hero-buttons">
+        <a href="{{ url_for('search') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-search"></i> Start Checking
+        </a>
+        <a href="{{ url_for('admin_login') }}" class="btn btn-secondary btn-lg">
+            <i class="fas fa-lock"></i> Admin Panel
+        </a>
+    </div>
+</section>
+
+<section class="features-section fade-in">
+    <div class="features-header">
+        <h2><span class="gradient-text">How It Works</span></h2>
+        <p>Our multi-layered detection system keeps you safe from misinformation and malicious content</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card stagger-1">
+            <div class="feature-icon blue">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>ML Analysis</h3>
+            <p>Advanced pattern matching and scoring algorithms analyze headlines for fake news indicators</p>
+        </div>
+        <div class="feature-card stagger-2">
+            <div class="feature-icon purple">
+                <i class="fas fa-link"></i>
+            </div>
+            <h3>URL Scanning</h3>
+            <p>Deep URL inspection checks for phishing patterns, suspicious domains, and known threats</p>
+        </div>
+        <div class="feature-card stagger-3">
+            <div class="feature-icon emerald">
+                <i class="fas fa-database"></i>
+            </div>
+            <h3>Threat Database</h3>
+            <p>Real-time cross-referencing with our constantly updated database of known malicious sites</p>
+        </div>
+        <div class="feature-card stagger-4">
+            <div class="feature-icon cyan">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Confidence Score</h3>
+            <p>Get detailed confidence ratings and risk factor breakdowns for every analysis</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

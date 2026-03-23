@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Attacker Dashboard{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="{{ url_for('attacker_home') }}" class="active"><i class="fas fa-home"></i> Home</a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-link"></i> URL <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('attacker_home') }}"><i class="fas fa-plus-circle"></i> Add Block URL</a>
+                    <a href="{{ url_for('attacker_view') }}"><i class="fas fa-list"></i> View URLs</a>
+                </div>
+            </li>
+            <li><a href="{{ url_for('attacker_logout') }}" class="btn-nav btn-nav-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="form-card fade-in">
+        <h2><i class="fas fa-skull-crossbones" style="color: var(--accent-red);"></i> Add Attack URL</h2>
+        <p class="form-subtitle">Add a malicious URL for testing detection</p>
+        <form method="POST" action="{{ url_for('attacker_home') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label for="attack-url"><i class="fas fa-link"></i> URL</label>
+                <input type="url" name="urls" id="attack-url" placeholder="https://malicious-example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="attack-keyword"><i class="fas fa-tags"></i> Keywords</label>
+                <textarea name="message" id="attack-keyword" placeholder="Enter keywords for the attack URL" required></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-danger" id="add-attack-btn">
+                    <i class="fas fa-plus"></i> Add Attack URL
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

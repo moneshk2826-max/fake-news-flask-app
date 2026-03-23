@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Manage Indicators{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle menu">
+            <i class="fas fa-bars"></i>
+        </button>
+        <ul class="navbar-links" id="navbar-links">
+            <li><a href="{{ url_for('admin_home') }}"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin_indicators') }}" class="active"><i class="fas fa-cogs"></i> Indicators</a></li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-link"></i> URL <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('admin_add_url') }}"><i class="fas fa-plus-circle"></i> Add News URL</a>
+                    <a href="{{ url_for('admin_view_urls') }}"><i class="fas fa-list"></i> View News URLs</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#"><i class="fas fa-bug"></i> Malware <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('admin_view_malware') }}"><i class="fas fa-user-secret"></i> User Search Malware</a>
+                    <a href="{{ url_for('admin_view_all_malware') }}"><i class="fas fa-database"></i> All Malware Sites</a>
+                </div>
+            </li>
+            <li><a href="{{ url_for('admin_logout') }}" class="btn-nav btn-nav-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="page-section fade-in">
+    <div class="page-header">
+        <h1>Manage Fake News Indicators</h1>
+        <p>Add or remove keywords that are used to detect fake news in headlines</p>
+    </div>
+
+    <div class="table-wrapper mb-3">
+        <div class="results-header results-safe" style="padding: 1rem 1.5rem;">
+            <i class="fas fa-plus" style="color: #6ee7b7; font-size: 1.2rem;"></i>
+            <h2>Add New Indicator</h2>
+        </div>
+        <div class="result-item" style="padding: 1.5rem;">
+            <form method="POST" action="{{ url_for('admin_indicators') }}" style="display: flex; gap: 1rem; align-items: center;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="action" value="add">
+                <input type="text" name="new_word" placeholder="Enter new keyword..." required style="flex: 1; padding: 0.5rem;">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <div class="results-header results-danger" style="padding: 1rem 1.5rem;">
+            <i class="fas fa-list" style="color: #fca5a5; font-size: 1.2rem;"></i>
+            <h2>Current Indicators</h2>
+            <span class="count">{{ indicators|length }}</span>
+        </div>
+        {% if indicators %}
+            {% for indicator in indicators %}
+            <div class="result-item">
+                <div class="result-keyword">
+                    <span class="badge badge-danger"><i class="fas fa-exclamation-triangle"></i> Fake Indicator</span>
+                    &nbsp; {{ indicator['word'] }}
+                </div>
+                <div class="result-url">
+                    <form method="POST" action="{{ url_for('admin_indicators') }}" style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="action" value="remove">
+                        <input type="hidden" name="remove_word" value="{{ indicator['word'] }}">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Remove this indicator?')">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <p>No indicators found</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="{{ url_for('admin_home') }}" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+    </div>
+</section>
+{% endblock %}

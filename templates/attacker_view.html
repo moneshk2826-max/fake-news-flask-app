@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Attack URLs{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="{{ url_for('attacker_home') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li class="dropdown">
+                <a href="#" class="active"><i class="fas fa-link"></i> URL <i class="fas fa-angle-down"></i></a>
+                <div class="dropdown-menu">
+                    <a href="{{ url_for('attacker_home') }}"><i class="fas fa-plus-circle"></i> Add Block URL</a>
+                    <a href="{{ url_for('attacker_view') }}"><i class="fas fa-list"></i> View URLs</a>
+                </div>
+            </li>
+            <li><a href="{{ url_for('attacker_logout') }}" class="btn-nav btn-nav-danger"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="page-header fade-in">
+        <h1>Attack URLs</h1>
+        <p>All attack URLs currently in the system</p>
+    </div>
+
+    <div class="table-wrapper fade-in">
+        {% if urls %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>URL</th>
+                    <th>Keyword</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in urls %}
+                <tr>
+                    <td>{{ row['id'] }}</td>
+                    <td><a href="{{ row['url'] }}" target="_blank" rel="noopener" style="color: #fca5a5;">{{ row['url'] }}</a></td>
+                    <td><span class="badge badge-danger">{{ row['keyword'] }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <p>No attack URLs added yet</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

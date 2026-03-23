@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Malicious URL Warning{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url_for('search') }}"><i class="fas fa-search"></i> Search</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="warning-page fade-in">
+    <div class="warning-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <h1>Malicious Web Page Detected!</h1>
+    <p>The URL you clicked has been identified as a potentially <strong>malicious website</strong>. This incident has been logged for security analysis.</p>
+    {% if url %}
+    <div class="form-card" style="max-width:500px; text-align:left; margin-bottom:2rem;">
+        <div class="form-group mb-1">
+            <label>Flagged URL</label>
+            <div style="color:#fca5a5; word-break:break-all; font-size:0.9rem;">{{ url }}</div>
+        </div>
+        {% if keyword %}
+        <div class="form-group mb-0">
+            <label>Keyword</label>
+            <span class="badge badge-danger">{{ keyword }}</span>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+        <i class="fas fa-home"></i> Return to Safety
+    </a>
+</section>
+{% endblock %}

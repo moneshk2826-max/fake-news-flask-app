@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+
+{% block nav %}
+<nav class="navbar">
+    <div class="navbar-inner">
+        <a href="{{ url_for('index') }}" class="navbar-brand">
+            <i class="fas fa-shield-halved"></i>
+            <span>FakeNewsML</span>
+        </a>
+        <ul class="navbar-links">
+            <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="{{ url_for('search') }}" class="active"><i class="fas fa-search"></i> Search</a></li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<section class="search-page fade-in">
+    <h1><span class="gradient-text">Search the Web</span></h1>
+    <p>Enter a full news headline or direct news article URL to check it</p>
+    <form class="search-box" action="{{ url_for('search_results') }}" method="GET">
+        <input type="text" name="search" placeholder="Paste a headline or https://news-site.com/article..." required id="search-input">
+        <button type="submit"><i class="fas fa-search"></i> Check</button>
+    </form>
+    <p class="search-helper">Single words like "add" will be ignored. Use a full headline or valid URL only.</p>
+</section>
+{% endblock %}
