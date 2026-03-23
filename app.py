@@ -82,8 +82,16 @@ USERS = {
 }
 
 # ==================== INITIALIZE DATABASE ====================
-init_db()
-app.logger.info('Application started successfully')
+_db_initialized = False
+
+
+@app.before_request
+def _ensure_db():
+    global _db_initialized
+    if not _db_initialized:
+        init_db()
+        app.logger.info('Database initialized on first request')
+        _db_initialized = True
 
 
 @app.context_processor
@@ -424,6 +432,7 @@ def rate_limit_exceeded(e):
 
 # ==================== RUN ====================
 if __name__ == '__main__':
+    init_db()
     debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=debug_mode, host='0.0.0.0', port=port)
