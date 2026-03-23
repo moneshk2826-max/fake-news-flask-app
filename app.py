@@ -21,7 +21,17 @@ from database import (  # type: ignore
     check_url_malicious, log_search, get_search_history,
     get_dashboard_stats
 )
-from ml_model import detect  # type: ignore
+try:
+    from ml_model import detect  # type: ignore
+except Exception:
+    def detect(x):
+        return {
+            'result': 'Unknown',
+            'confidence': 0,
+            'method': 'Fallback',
+            'details': 'ML not available',
+            'risk_factors': []
+        }
 from validators import (  # type: ignore
     sanitize_input,
     is_valid_url,
@@ -32,7 +42,7 @@ from validators import (  # type: ignore
 
 # ==================== APP CONFIGURATION ====================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_DIR = os.path.join(BASE_DIR, 'logs')
+LOG_DIR = '/tmp'
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'change-this-in-production')
@@ -50,8 +60,6 @@ limiter = Limiter(
 )
 
 # ==================== LOGGING ====================
-if not os.path.exists(LOG_DIR):
-    os.makedirs(LOG_DIR)
 
 file_handler = RotatingFileHandler(
     os.path.join(LOG_DIR, 'app.log'),
