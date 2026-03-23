@@ -90,16 +90,8 @@ USERS = {
 }
 
 # ==================== INITIALIZE DATABASE ====================
-_db_initialized = False
-
-
-@app.before_request
-def _ensure_db():
-    global _db_initialized
-    if not _db_initialized:
-        init_db()
-        app.logger.info('Database initialized on first request')
-        _db_initialized = True
+with app.app_context():
+    init_db()
 
 
 @app.context_processor
