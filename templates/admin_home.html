@@ -38,10 +38,12 @@
 {% block content %}
 <section class="page-section">
     <div class="page-header fade-in">
+        <div class="page-header-badge"><i class="fas fa-shield-halved"></i> Admin Panel</div>
         <h1>Admin Dashboard</h1>
         <p>Monitor system activity and manage fake news detection</p>
     </div>
 
+    <div class="section-label fade-in"><i class="fas fa-chart-bar"></i> Overview Metrics</div>
     <div class="stats-grid fade-in">
         <div class="stat-card stat-blue stagger-1">
             <div class="stat-icon"><i class="fas fa-search"></i></div>
@@ -87,7 +89,8 @@
         </div>
     </div>
 
-    <div class="dashboard-grid mt-3">
+    <div class="section-label fade-in mt-3"><i class="fas fa-bolt"></i> Quick Actions</div>
+    <div class="dashboard-grid">
         <a href="{{ url_for('admin_indicators') }}" class="card-link">
             <div class="card fade-in stagger-1">
                 <div class="card-icon blue"><i class="fas fa-cogs"></i></div>
@@ -133,10 +136,14 @@
     </div>
 
     {% if stats.recent_searches %}
-    <div class="table-wrapper fade-in mt-3">
-        <div class="results-header" style="padding: 1rem 1.5rem;">
-            <i class="fas fa-clock" style="color: var(--accent-cyan); font-size: 1.2rem;"></i>
-            <h2>Recent Searches</h2>
+    <div class="section-label fade-in mt-3"><i class="fas fa-clock"></i> Recent Activity</div>
+    <div class="table-wrapper fade-in">
+        <div class="table-card-header">
+            <div class="table-card-title">
+                <i class="fas fa-clock"></i>
+                <h2>Recent Searches</h2>
+            </div>
+            <span class="table-card-count">Latest</span>
         </div>
         <table>
             <thead>
