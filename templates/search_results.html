@@ -72,7 +72,7 @@
                     style="width: 0%">
                 </div>
             </div>
-            <span class="result-confidence-value">{{ confidence }}%</span>
+            <span class="result-confidence-value">{{ confidence if confidence is defined and confidence is not none else 0 }}%</span>
         </div>
 
         <!-- Verdict -->
@@ -90,36 +90,105 @@
                 {% endif %}
             </div>
             <div class="result-verdict-text">
-                <h2>{{ result }}</h2>
-                <p>{{ method }}</p>
+                <h2>{{ result if result else 'Not available' }}</h2>
+                <p>{{ method if method else 'Not available' }}</p>
             </div>
         </div>
 
-        <!-- Meta details -->
-        <div class="result-meta">
-            <div class="result-meta-row">
-                <i class="fas fa-microscope"></i>
-                <span><strong>Method</strong> — {{ method }}</span>
-            </div>
-            <div class="result-meta-row">
-                <i class="fas fa-info-circle"></i>
-                <span><strong>Details</strong> — {{ details }}</span>
-            </div>
-        </div>
+        <!-- ═══ Result Explanation ═══ -->
+        <div class="result-explanation">
 
-        <!-- Risk factors -->
-        {% if risk_factors %}
-        <div class="result-risks">
-            <div class="result-risks-title">
-                <i class="fas fa-flag"></i> Risk Factors
+            <!-- 1. Result Summary -->
+            <div class="result-explain-card">
+                <div class="result-explain-heading">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span>Result Summary</span>
+                </div>
+                <p class="result-explain-text">
+                    {% if result == 'Fake News' %}
+                        This news headline is likely fake based on analysis.
+                    {% elif result == 'Malicious URL' %}
+                        This URL has been flagged as potentially malicious.
+                    {% elif result == 'Suspicious' %}
+                        This news headline shows suspicious patterns and should be verified.
+                    {% elif result == 'Real News' or result == 'Safe' %}
+                        This news appears to be reliable based on the model.
+                    {% else %}
+                        The system could not conclusively determine the nature of this content.
+                    {% endif %}
+                </p>
             </div>
-            <ul>
-                {% for factor in risk_factors %}
-                <li>{{ factor }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+
+            <!-- 2. Confidence Explanation -->
+            <div class="result-explain-card">
+                <div class="result-explain-heading">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Confidence Level</span>
+                </div>
+                <p class="result-explain-text">
+                    {% if confidence is defined and confidence is not none %}
+                        The system is approximately <strong>{{ confidence }}%</strong> confident in this prediction.
+                        {% if confidence|int >= 80 %}
+                            This is a high-confidence result.
+                        {% elif confidence|int >= 50 %}
+                            This is a moderate-confidence result — consider cross-checking with other sources.
+                        {% else %}
+                            This is a low-confidence result — the prediction should be treated with caution.
+                        {% endif %}
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- 3. Method Explanation -->
+            <div class="result-explain-card">
+                <div class="result-explain-heading">
+                    <i class="fas fa-microscope"></i>
+                    <span>Analysis Method</span>
+                </div>
+                <p class="result-explain-text">
+                    {% if method %}
+                        This result is generated using <strong>{{ method }}</strong> — a combination of Machine Learning and rule-based analysis.
+                    {% else %}
+                        Not available
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- 4. Detailed Reasoning -->
+            <div class="result-explain-card">
+                <div class="result-explain-heading">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Detailed Reasoning</span>
+                </div>
+                <p class="result-explain-text">
+                    {{ details if details else 'Not available' }}
+                </p>
+            </div>
+
+            <!-- 5. Risk Factors -->
+            <div class="result-explain-card">
+                <div class="result-explain-heading">
+                    <i class="fas fa-flag"></i>
+                    <span>Risk Factors</span>
+                </div>
+                {% if risk_factors %}
+                    <p class="result-explain-intro">The following patterns influenced the decision:</p>
+                    <ul class="result-explain-list">
+                        {% for factor in risk_factors %}
+                        <li>{{ factor }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="result-explain-text result-explain-safe">
+                        <i class="fas fa-check-circle"></i>
+                        No strong suspicious indicators found.
+                    </p>
+                {% endif %}
+            </div>
+
+        </div><!-- /.result-explanation -->
 
     </div><!-- /.result-panel-body -->
 

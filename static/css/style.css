@@ -1425,3 +1425,98 @@ a:hover {
     margin-top: 2px;
     flex-shrink: 0;
 }
+
+/* ═══════════════════════════════════════════════════════
+   RESULT EXPLANATION — Detailed breakdown cards
+   ═══════════════════════════════════════════════════════ */
+
+.result-explanation {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.result-explain-card {
+    background: #f8f7f5;
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1.1rem;
+}
+
+.result-explain-heading {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.result-explain-heading i {
+    font-size: 0.82rem;
+    color: var(--accent-blue);
+}
+
+.result-explain-text {
+    font-size: 0.86rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 400;
+}
+
+.result-explain-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.result-explain-intro {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0 0 0.5rem 0;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.result-explain-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0;
+    margin: 0;
+}
+
+.result-explain-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.result-explain-list li::before {
+    content: '›';
+    color: var(--accent-red);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+
+.result-explain-safe {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #065f46;
+}
+
+.result-explain-safe i {
+    color: var(--accent-emerald);
+    font-size: 0.85rem;
+}
+
