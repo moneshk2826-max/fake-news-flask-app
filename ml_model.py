@@ -28,6 +28,30 @@ SENSATIONAL_PHRASES = {
     "earth will go dark": 0.35,
     "go dark": 0.22,
     "cure": 0.18,
+    "they don't want you to know": 0.35,
+    "they dont want you to know": 0.35,
+    "what they're not telling you": 0.30,
+    "what theyre not telling you": 0.30,
+    "big pharma": 0.28,
+    "deep state": 0.30,
+    "wake up": 0.18,
+    "open your eyes": 0.22,
+    "the truth about": 0.18,
+    "exposed the truth": 0.25,
+    "caught on camera": 0.18,
+    "spread this before": 0.30,
+    "share before deleted": 0.35,
+    "media won't show": 0.30,
+    "media wont show": 0.30,
+    "100% proof": 0.30,
+    "exposed by": 0.20,
+    "illuminati": 0.30,
+    "flat earth": 0.35,
+    "chemtrails": 0.30,
+    "5g causes": 0.30,
+    "microchip": 0.22,
+    "mark of the beast": 0.28,
+    "depopulation": 0.28,
 }
 
 SUSPICIOUS_CLAIM_PATTERNS = {
@@ -38,6 +62,12 @@ SUSPICIOUS_CLAIM_PATTERNS = {
     r"\bcover[\s-]?up\b": "Cover-up allegation detected",
     r"\bhidden truth\b": "Hidden-truth framing detected",
     r"\bmainstream media\b": "Media conspiracy framing detected",
+    r"\b(exposed|reveals?)\s+(the\s+)?truth\b": "Truth-revelation framing detected",
+    r"\bwhat\s+(they|the\s+government|the\s+media)\s+(don'?t|won'?t|aren'?t)\b": "Suppression narrative detected",
+    r"\b(exposed|caught)\s+(red[\s-]?handed|lying|cheating)\b": "Accusation-without-evidence framing detected",
+    r"\b(exposed|unmasked|busted)\b": "Unmasking framing detected",
+    r"\bdoctors?\s+(don'?t|won'?t|refuse)\b": "Anti-medical-authority framing detected",
+    r"\b(exposed|leaked)\s+(emails?|footage|video|audio)\b": "Leaked-media framing detected",
 }
 
 model = None
@@ -93,11 +123,14 @@ def _headline_heuristics(text):
 
     matched_phrases = [phrase for phrase in SENSATIONAL_PHRASES if phrase in lowered]
     if matched_phrases:
-        score += min(0.55, sum(SENSATIONAL_PHRASES[phrase] for phrase in matched_phrases))
+        score += min(0.70, sum(SENSATIONAL_PHRASES[phrase] for phrase in matched_phrases))
         risk_factors.append("Sensational or clickbait wording detected")
         if len(matched_phrases) >= 2:
-            score += 0.12
+            score += 0.15
             risk_factors.append("Multiple sensational trigger phrases stacked together")
+        if len(matched_phrases) >= 3:
+            score += 0.15
+            risk_factors.append("Heavy concentration of fake-news trigger language")
 
     matched_claim_patterns = []
     for pattern, message in SUSPICIOUS_CLAIM_PATTERNS.items():
@@ -145,6 +178,9 @@ def _headline_heuristics(text):
     if re.search(r"\b(always|never|everyone|nobody|all|none)\b", lowered):
         score += 0.08
         risk_factors.append("Absolute claim language detected")
+
+    if len(risk_factors) >= 3:
+        score += 0.12
 
     return min(score, 1.0), risk_factors
 
@@ -261,10 +297,10 @@ def get_model_and_vectorizer():
 
 
 def _build_heuristic_response(score, risk_factors, normalized_text, ml_reason=None):
-    if score >= 0.65:
+    if score >= 0.55:
         result = "Fake News"
         confidence = max(65.0, min(98.0, score * 100.0))
-    elif score >= 0.35:
+    elif score >= 0.28:
         result = "Suspicious"
         confidence = max(55.0, min(90.0, score * 100.0 + 10.0))
     else:
@@ -366,16 +402,16 @@ def detect(text):
             ml_reason=f"prediction failed: {exc}",
         )
 
-    combined_fake_score = (fake_probability * 0.6) + (heuristic_score * 0.4)
+    combined_fake_score = (fake_probability * 0.5) + (heuristic_score * 0.5)
 
-    if heuristic_score >= 0.60 or combined_fake_score >= 0.50:
+    if heuristic_score >= 0.55 or combined_fake_score >= 0.45:
         result = "Fake News"
         confidence = max(fake_probability, heuristic_score, combined_fake_score) * 100.0
         if heuristic_score > fake_probability:
             message = "Headline pattern risk outweighed the ML real score"
             if message not in risk_factors:
                 risk_factors.append(message)
-    elif combined_fake_score >= 0.38 or heuristic_score >= 0.35:
+    elif combined_fake_score >= 0.30 or heuristic_score >= 0.28:
         result = "Suspicious"
         confidence = max(50.0, combined_fake_score * 100.0)
         message = "Mixed ML and headline pattern signals detected"
