@@ -82,6 +82,16 @@ def _normalize_text(text):
     return re.sub(r"\s+", " ", str(text or "").strip()).strip("\"'")
 
 
+def preprocess_text(text):
+    """Lowercase and remove punctuation for cleaner TF-IDF input."""
+    try:
+        text = text.lower()
+        text = re.sub(r"[^\w\s]", "", text)
+        return text
+    except Exception:
+        return text
+
+
 def _normalize_lookup_text(text):
     return _normalize_text(text).strip("\"'").lower()
 
@@ -383,7 +393,12 @@ def detect(text):
             ml_reason=_ml_error or "model unavailable",
         )
 
-    text_vector = vectorizer_instance.transform([normalized_text])
+    try:
+        clean_text = preprocess_text(normalized_text)
+    except Exception:
+        clean_text = normalized_text
+
+    text_vector = vectorizer_instance.transform([clean_text])
 
     fake_probability = 0.5
     real_probability = 0.5
